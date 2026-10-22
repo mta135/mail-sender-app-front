@@ -32,6 +32,9 @@
     border-radius: 12px;
     padding: 35px 15px;
     cursor: pointer;
+    /* Clicking the label otherwise leaves a blinking text caret after the file name */
+    user-select: none;
+    caret-color: transparent;
 }
 
 .choose_file #choose_file {
@@ -49,4 +52,19 @@
 .choose_file p {
     font-size: 16px;
     color: #3B0075;
+}
+
+.submit_btn {
+    margin-top: 16px;
+    padding: 10px 48px;
+    border: none;
+    border-radius: 12px;
+    background: #3B0075;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit_btn:disabled {
+    cursor: not-allowed;
 }

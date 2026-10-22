@@ -3,7 +3,14 @@
     <label for="choose_file">
       <input type="file" id="choose_file" (change)="onFileSelected($event)" />
       <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
-      <p>Browse File to Upload</p>
+      @if (selectedFile(); as file) {
+        <p>{{ file.name }}</p>
+      } @else {
+        <p>Browse File to Upload</p>
+      }
     </label>
   </div>
+  <button type="button" class="submit_btn" [disabled]="!selectedFile() || isUploading()" (click)="onUpload()">
+    Transmite
+  </button>
 </div>
