@@ -15,6 +15,7 @@ export class MailSender {
 
 
   isUploading = signal(false);
+  isDragging = signal(false);
   error = signal<string | null>(null);
 
 
@@ -30,6 +31,32 @@ export class MailSender {
     }
     // Clear the input so picking the same file again still fires (change)
     input.value = '';
+  }
+
+
+  // preventDefault on dragover is what allows the drop; without it the browser opens the file
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging.set(true);
+  }
+
+
+  onDragLeave(event: DragEvent): void {
+    // dragleave also fires when moving onto the icon or text inside the drop zone
+    const target = event.currentTarget as HTMLElement;
+    if (!target.contains(event.relatedTarget as Node)) {
+      this.isDragging.set(false);
+    }
+  }
+
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging.set(false);
+    const file = event.dataTransfer?.files[0];
+    if (file) {
+      this.selectedFile.set(file);
+    }
   }
 
 

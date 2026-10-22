@@ -1,12 +1,18 @@
 <div class="wrapper">
   <div class="choose_file">
-    <label for="choose_file">
+    <label
+      for="choose_file"
+      [class.dragging]="isDragging()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
       <input type="file" id="choose_file" (change)="onFileSelected($event)" />
       <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
       @if (selectedFile(); as file) {
         <p>{{ file.name }}</p>
       } @else {
-        <p>Browse File to Upload</p>
+        <p>Browse or Drop File to Upload</p>
       }
     </label>
   </div>

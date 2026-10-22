@@ -37,6 +37,11 @@
     caret-color: transparent;
 }
 
+.choose_file label.dragging {
+    border: 1px dashed #3B0075;
+    background: #f5f0fa;
+}
+
 .choose_file #choose_file {
     display: none;
 }
