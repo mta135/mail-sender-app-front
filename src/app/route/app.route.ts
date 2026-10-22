@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { Mailform } from '../components/mailform/mailform';
+import { MailSender } from '../components/mail-sender/mail-sender';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'mailform', pathMatch: 'full' },
-  { path: 'mailform', component: Mailform },
+  { path: '', redirectTo: 'mail-sender', pathMatch: 'full' },
+  { path: 'mail-sender', component: MailSender },
 ];
