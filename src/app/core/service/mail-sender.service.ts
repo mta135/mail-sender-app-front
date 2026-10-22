@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 export class MailSenderService {
 
     private apiUrl = 'https://localhost:7191/api/File/MessageData';
+    private templateUrl = 'https://localhost:7191/api/File/Template';
 
     private http = inject(HttpClient);
 
@@ -22,6 +23,11 @@ export class MailSenderService {
         return this.http.post<any>(this.apiUrl, formData);
 
 
+    }
+
+
+    DownloadTemplate(): Observable<Blob> {
+        return this.http.get(this.templateUrl, { responseType: 'blob' });
     }
 
 }
