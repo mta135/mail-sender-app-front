@@ -3,6 +3,7 @@
     <label
       for="choose_file"
       [class.dragging]="isDragging()"
+      (dragenter)="onDragEnter($event)"
       (dragover)="onDragOver($event)"
       (dragleave)="onDragLeave($event)"
       (drop)="onDrop($event)"

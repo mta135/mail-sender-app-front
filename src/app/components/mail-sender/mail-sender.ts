@@ -30,6 +30,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
   selector: 'app-mail-sender',
   styleUrl: './mail-sender.css',
   templateUrl: './mail-sender.html',
+  // A file dropped just outside the drop zone would otherwise be opened by the browser,
+  // replacing the app (Firefox does this)
+  host: {
+    '(window:dragover)': '$event.preventDefault()',
+    '(window:drop)': '$event.preventDefault()',
+  },
 })
 export class MailSender {
 
@@ -43,6 +49,7 @@ export class MailSender {
 
   isUploading = signal(false);
   isDragging = signal(false);
+  private dragDepth = 0;
   error = signal<string | null>(null);
 
 
@@ -62,21 +69,33 @@ export class MailSender {
   }
 
   // preventDefault on dragover is what allows the drop; without it the browser opens the file
-  onDragOver(event: DragEvent): void {
+  // Firefox only allows the drop if dragenter is cancelled too, not just dragover
+  onDragEnter(event: DragEvent): void {
     event.preventDefault();
+    this.dragDepth++;
     this.isDragging.set(true);
   }
 
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'copy';
+    }
+  }
+
+  // dragenter/dragleave also fire for the icon and text inside the drop zone, and Firefox
+  // often reports relatedTarget as null, so count enters/leaves instead of checking it
   onDragLeave(event: DragEvent): void {
-    // dragleave also fires when moving onto the icon or text inside the drop zone
-    const target = event.currentTarget as HTMLElement;
-    if (!target.contains(event.relatedTarget as Node)) {
+    event.preventDefault();
+    this.dragDepth = Math.max(0, this.dragDepth - 1);
+    if (this.dragDepth === 0) {
       this.isDragging.set(false);
     }
   }
 
   onDrop(event: DragEvent): void {
     event.preventDefault();
+    this.dragDepth = 0;
     this.isDragging.set(false);
     const file = event.dataTransfer?.files[0];
     if (file) {
