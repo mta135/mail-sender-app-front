@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { MailSenderService } from '../../core/service/mail-sender.service';
+import { ToastService } from '../../core/service/toast-service';
 
 @Component({
   imports: [],
@@ -9,6 +10,8 @@ import { MailSenderService } from '../../core/service/mail-sender.service';
 })
 export class MailSender {
 
+
+  private toastService = inject(ToastService);
 
   private mailSenderService = inject(MailSenderService);
   selectedFile = signal<File | null>(null);
@@ -21,6 +24,8 @@ export class MailSender {
 
 
   onFileSelected(event: Event): void {
+
+    this.toastService.show('Mesajul a fost transmis');
 
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
