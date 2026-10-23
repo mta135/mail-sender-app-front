@@ -16,7 +16,12 @@
       }
     </label>
   </div>
-  <button type="button" class="submit_btn" [disabled]="!selectedFile() || isUploading()" (click)="UploadTempalteFile()">
-    Transmite
-  </button>
+  <div class="actions">
+    <button type="button" class="submit_btn" [disabled]="!selectedFile() || isUploading()" (click)="UploadTempalteFile()">
+      Transmite
+    </button>
+    <button type="button" class="cancel_btn" [disabled]="!selectedFile() || isUploading()" (click)="cancel()">
+      Anulează
+    </button>
+  </div>
 </div>

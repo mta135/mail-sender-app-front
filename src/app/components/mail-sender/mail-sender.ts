@@ -65,6 +65,12 @@ export class MailSender {
   }
 
 
+  cancel(): void {
+    this.selectedFile.set(null);
+    this.error.set(null);
+  }
+
+
   UploadTempalteFile(): void {
     const file = this.selectedFile();
     if (!file) return;

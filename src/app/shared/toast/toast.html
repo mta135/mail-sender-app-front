@@ -1,5 +1,11 @@
 @if (toast(); as toast) {
-  <div class="toast" [class]="toast.type" role="status" aria-live="polite">
+  <div
+    class="toast"
+    [class]="toast.type"
+    animate.leave="fade-out"
+    role="status"
+    aria-live="polite"
+  >
     {{ toast.text }}
   </div>
 }

@@ -2,6 +2,8 @@
     position: fixed;
     top: 20px;
     right: 20px;
+    min-width: 360px;
+    text-align: center;
     padding: 12px 20px;
     border-radius: 6px;
     color: white;
@@ -12,7 +14,13 @@
 
 
 .success {
-    background-color: #4CAF50;
+    background-color: #2E7D32;
+}
+
+/* Applied by animate.leave; Angular removes the element once the transition ends */
+.fade-out {
+    opacity: 0;
+    transition: opacity 1.9s ease;
 }
 
 .error {
