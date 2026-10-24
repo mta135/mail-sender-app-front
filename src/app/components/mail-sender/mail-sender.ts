@@ -74,9 +74,14 @@ export class MailSender {
     this.dragDepth = 0;
     this.isDragging.set(false);
     const file = event.dataTransfer?.files[0];
-    if (file) {
-      this.selectedFile.set(file);
+    if (!file) return;
+
+    if (!/\.(xlsx|xls)$/i.test(file.name)) {
+      this.toastService.show('Sunt acceptate doar fișiere Excel (.xlsx, .xls).', 'error');
+      return;
     }
+
+    this.selectedFile.set(file);
   }
 
   cancel(): void {

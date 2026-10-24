@@ -3,7 +3,7 @@
 
     <label for="choose_file" [class.dragging]="isDragging()" (dragenter)="onDragEnter($event)"
       (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
-      <input type="file" id="choose_file" (change)="onFileSelected($event)" />
+      <input type="file" id="choose_file" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" (change)="onFileSelected($event)" />
       <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
 
       @if (selectedFile(); as file) {

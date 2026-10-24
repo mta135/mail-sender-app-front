@@ -65,6 +65,8 @@
 .mat-mdc-cell {
     overflow-wrap: anywhere;
     padding: 0 14px;
+    /* Empty columns (e.g. Cc) would otherwise shrink to the header text */
+    min-width: 110px;
 }
 
 /* Drag handle on the right edge of each header cell, used to resize the column */
@@ -79,6 +81,7 @@
 
 .mat-mdc-header-cell {
     background: #f5f5f5;
+    color: #000;
     font-weight: bold;
     text-align: center;
 }
@@ -103,7 +106,7 @@
     gap: 12px;
     border: 1px solid #d9d8e3;
     border-radius: 12px;
-    padding: 35px 15px;
+    padding: 18px 15px;
     cursor: pointer;
     /* Clicking the label otherwise leaves a blinking text caret after the file name */
     user-select: none;
