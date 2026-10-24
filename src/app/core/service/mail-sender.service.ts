@@ -18,7 +18,6 @@ export class MailSenderService {
     private http = inject(HttpClient);
 
     UploadFile(file: File): Observable<MailImportResult> {
-
         const formData = new FormData();
         formData.append('file', file, file.name);
         return this.http.post<MailImportResult>(this.apiUrl, formData);

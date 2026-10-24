@@ -1,9 +1,9 @@
 export interface MailSettingModel {
 
-    id: number;
-    mailFrom: string;
+    Id: number;
+    MailFrom: string;
 
-    password: string;
-    isActive: boolean;
-    host: string;
+    Password: string;
+    IsActive: boolean;
+    Host: string;
 }

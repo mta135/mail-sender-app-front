@@ -2,8 +2,8 @@ import { MailMessageModel } from "./mail-message";
 
 export interface MailImportResult {
 
-    isSucces: boolean;
-    message: string;
+    IsSucces: boolean;
+    Message: string;
 
-    mailMessages: MailMessageModel[];
+    MailMessages: MailMessageModel[];
 }

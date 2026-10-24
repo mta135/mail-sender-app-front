@@ -84,26 +84,7 @@ export class MailSender {
   }
 
   UploadTempalteFile(): void {
-    const file = this.selectedFile();
-    if (!file) return;
 
-    debugger
-
-    this.isUploading.set(true);
-    this.error.set(null);
-    this.mailSenderService.UploadFile(file).subscribe({
-
-      next: data => {
-        this.isUploading.set(false);
-        this.selectedFile.set(null);
-      },
-      error: err => {
-
-        this.error.set(typeof err.error === 'string' ? err.error : 'Eroare la procesarea fișierului.');
-        this.isUploading.set(false);
-
-      }
-    });
   }
 
 
@@ -113,15 +94,16 @@ export class MailSender {
 
     this.mailSenderService.UploadFile(file).subscribe({
       next: (result: MailImportResult) => {
+        console.log(result);
 
-        if (result.isSucces) {
-          debugger
+        debugger;
+        if (result.IsSucces) {
 
-          this.BindMessagesGrid(result.mailMessages);
+          this.BindMessagesGrid(result.MailMessages);
           this.toastService.show('Mesajul a fost transmis');
 
         } else {
-          this.toastService.show(result.message, 'error');
+          this.toastService.show(result.Message, 'error');
         }
       },
       error: (err) => {
