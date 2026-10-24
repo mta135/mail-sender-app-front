@@ -42,6 +42,7 @@ export class MailSender {
       this.selectedFile.set(input.files?.[0] ?? null);
     }
 
+    this.ClearGrid();
     input.value = '';
     this.GetMessage();
   }
@@ -148,6 +149,12 @@ export class MailSender {
 
     document.addEventListener('mousemove', onMove);
     document.addEventListener('mouseup', onUp);
+  }
+
+  private ClearGrid(): void {
+    if (this.dataSource().length > 0) {
+      this.dataSource.set([]);
+    }
   }
 
 }
