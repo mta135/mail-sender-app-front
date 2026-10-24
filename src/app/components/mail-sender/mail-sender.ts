@@ -97,13 +97,13 @@ export class MailSender {
         console.log(result);
 
         debugger;
-        if (result.IsSucces) {
+        if (result.isSucces) {
 
-          this.BindMessagesGrid(result.MailMessages);
+          this.BindMessagesGrid(result.value);
           this.toastService.show('Mesajul a fost transmis');
 
         } else {
-          this.toastService.show(result.Message, 'error');
+          this.toastService.show(result.message, 'error');
         }
       },
       error: (err) => {
@@ -113,10 +113,10 @@ export class MailSender {
   }
 
 
-  private BindMessagesGrid(mailmessages: MailMessages[]): void {
+  private BindMessagesGrid(value: MailMessages[]): void {
 
     this.displayedColumns = ['From', 'To', 'Subject', 'Body', 'Attachments', 'Cc', 'Header', 'Footer', 'BodyAsHtml', 'Status',];
-    this.dataSource.set(mailmessages ?? []);
+    this.dataSource.set(value ?? []);
   }
 
 }

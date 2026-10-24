@@ -2,23 +2,23 @@ import { MailSettingModel } from './mail-setting';
 
 export interface MailMessageModel {
 
-    MailFrom: string;
-    ToRecipients: string;
+    mailFrom: string;
+    toRecipients: string;
 
-    Subject: string;
-    Body: string;
+    subject: string;
+    body: string;
 
-    AttachmentPath: string;
-    CcRecipients: string;
+    attachmentPath: string;
+    ccRecipients: string;
 
-    Status: string;
-    Header: string;
+    status: string;
+    header: string;
 
-    Footer: string;
-    Setting: MailSettingModel;
+    footer: string;
+    setting: MailSettingModel;
 
-    BodyAsHtml: string;
-    ErrorMessage: string | null;
-    HasError: boolean;
+    bodyAsHtml: string;
+    errorMessage: string | null;
+    hasError: boolean;
 
 }
