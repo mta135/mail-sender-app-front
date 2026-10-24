@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MailMessageModel } from '../../model/mail-message';
+import { MailImportResult } from '../../model/mail-import-result';
 
 @Injectable({
     providedIn: 'root'
@@ -16,11 +17,11 @@ export class MailSenderService {
 
     private http = inject(HttpClient);
 
-    UploadFile(file: File): Observable<MailMessageModel[]> {
+    UploadFile(file: File): Observable<MailImportResult> {
 
         const formData = new FormData();
         formData.append('file', file, file.name);
-        return this.http.post<MailMessageModel[]>(this.apiUrl, formData);
+        return this.http.post<MailImportResult>(this.apiUrl, formData);
 
     }
 
