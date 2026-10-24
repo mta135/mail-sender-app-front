@@ -54,8 +54,9 @@
     background: #fff;
     /* Material's own token for the line under each row */
     --mat-table-row-item-outline-color: #e0e0e0;
+    --mat-table-row-item-label-text-color: #6c757d;
     /* Material's own tokens for the row heights (52px / 56px by default) */
-    --mat-table-row-item-container-height: 18px;
+    --mat-table-row-item-container-height: 16px;
     --mat-table-header-container-height: 48px;
 }
 
@@ -63,7 +64,7 @@
 .mat-mdc-header-cell,
 .mat-mdc-cell {
     overflow-wrap: anywhere;
-    padding: 0 4px;
+    padding: 0;
 }
 
 /* Drag handle on the right edge of each header cell, used to resize the column */
@@ -83,8 +84,9 @@
 }
 
 .mat-mdc-cell {
-    color: #000000;
-    font-size: 13px;
+    color: #6c757d;
+    font-size: 12px;
+    font-weight: bold;
     line-height: 1.2;
     text-align: center;
 }
