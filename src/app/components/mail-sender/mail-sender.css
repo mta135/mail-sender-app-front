@@ -28,23 +28,65 @@
     flex-direction: column;
 }
 
-/* Uploader, the button row and the table take three quarters of the content area */
+/* Uploader and the button row take three quarters of the content area */
 .choose_file,
-.actions,
-.mat-mdc-table {
+.actions {
     width: 75%;
 }
 
-.mat-mdc-table {
-    /* Pushed to the bottom of the wrapper */
-    margin-top: auto;
-    background: #fff;
+/* Panel holding the grid; the grid scrolls vertically and horizontally inside it */
+.panel {
+    width: 100%;
+    margin-top: 32px;
+    /* Fills the rest of the wrapper, so its bottom edge lines up with the sidebar avatar */
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: auto;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
-    /* Clips the corner cells so they don't poke out of the rounded border */
-    overflow: hidden;
+    background: #fff;
+}
+
+.mat-mdc-table {
+    /* Wider than the panel when the columns need it, which brings in the horizontal scrollbar */
+    width: max-content;
+    min-width: 100%;
+    background: #fff;
     /* Material's own token for the line under each row */
     --mat-table-row-item-outline-color: #e0e0e0;
+    /* Material's own tokens for the row heights (52px / 56px by default) */
+    --mat-table-row-item-container-height: 18px;
+    --mat-table-header-container-height: 48px;
+}
+
+/* Column widths are set on the header cells (see columnWidth); long values wrap inside them */
+.mat-mdc-header-cell,
+.mat-mdc-cell {
+    overflow-wrap: anywhere;
+    padding: 0 4px;
+}
+
+/* Drag handle on the right edge of each header cell, used to resize the column */
+.resize_handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6px;
+    height: 100%;
+    cursor: col-resize;
+}
+
+.mat-mdc-header-cell {
+    background: #f5f5f5;
+    font-weight: bold;
+    text-align: center;
+}
+
+.mat-mdc-cell {
+    color: #000000;
+    font-size: 13px;
+    line-height: 1.2;
+    text-align: center;
 }
 
 /* Vertical lines between columns */

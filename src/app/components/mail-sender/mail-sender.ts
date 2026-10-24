@@ -21,6 +21,7 @@ export class MailSender {
 
   displayedColumns: string[] = [];
   dataSource = signal<MailMessages[]>([]);
+  columnWidths = signal<Record<string, number>>({});
 
   private toastService = inject(ToastService);
   private mailSenderService = inject(MailSenderService);
@@ -100,7 +101,7 @@ export class MailSender {
         if (result.isSucces) {
 
           this.BindMessagesGrid(result.value);
-          this.toastService.show('Mesajul a fost transmis');
+          this.toastService.show('Fisierul este valid');
 
         } else {
           this.toastService.show(result.message, 'error');
@@ -117,6 +118,31 @@ export class MailSender {
 
     this.displayedColumns = ['From', 'To', 'Subject', 'Body', 'Attachments', 'Cc', 'Header', 'Footer', 'BodyAsHtml', 'Status',];
     this.dataSource.set(value ?? []);
+  }
+
+
+  columnWidth(column: string): number {
+    return this.columnWidths()[column] ?? 300;
+  }
+
+  startResize(event: MouseEvent, column: string): void {
+    // Keeps the drag from selecting the header text
+    event.preventDefault();
+
+    const startX = event.clientX;
+    const startWidth = (event.target as HTMLElement).parentElement!.offsetWidth;
+
+    const onMove = (move: MouseEvent) => {
+      const width = Math.max(80, startWidth + move.clientX - startX);
+      this.columnWidths.update((widths) => ({ ...widths, [column]: width }));
+    };
+    const onUp = () => {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
   }
 
 }

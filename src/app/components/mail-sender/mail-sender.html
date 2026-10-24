@@ -28,58 +28,60 @@
     </button>
 
   </div>
+  <div class="panel">
   <table mat-table [dataSource]="dataSource()" class="mat-shadow-2">
     <ng-container matColumnDef="From">
-      <th mat-header-cell *matHeaderCellDef>From</th>
+      <th mat-header-cell *matHeaderCellDef [style.width.px]="columnWidth('From')" [style.min-width.px]="columnWidth('From')">From<span class="resize_handle" (mousedown)="startResize($event, 'From')"></span></th>
       <td mat-cell *matCellDef="let element">{{ element.mailFrom }}</td>
     </ng-container>
 
     <ng-container matColumnDef="To">
-      <th mat-header-cell *matHeaderCellDef>To</th>
+      <th mat-header-cell *matHeaderCellDef [style.width.px]="columnWidth('To')" [style.min-width.px]="columnWidth('To')">To<span class="resize_handle" (mousedown)="startResize($event, 'To')"></span></th>
       <td mat-cell *matCellDef="let element">{{ element.toRecipients }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Subject">
-      <th mat-header-cell *matHeaderCellDef>Subject</th>
+      <th mat-header-cell *matHeaderCellDef [style.width.px]="columnWidth('Subject')" [style.min-width.px]="columnWidth('Subject')">Subject<span class="resize_handle" (mousedown)="startResize($event, 'Subject')"></span></th>
       <td mat-cell *matCellDef="let element">{{ element.subject }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Body">
-      <th mat-header-cell *matHeaderCellDef>Body</th>
+      <th mat-header-cell *matHeaderCellDef [style.width.px]="columnWidth('Body')" [style.min-width.px]="columnWidth('Body')">Body<span class="resize_handle" (mousedown)="startResize($event, 'Body')"></span></th>
       <td mat-cell *matCellDef="let element">{{ element.body }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Attachments">
-      <th mat-header-cell *matHeaderCellDef>Attachments</th>
+      <th mat-header-cell *matHeaderCellDef [style.width.px]="columnWidth('Attachments')" [style.min-width.px]="columnWidth('Attachments')">Attachments<span class="resize_handle" (mousedown)="startResize($event, 'Attachments')"></span></th>
       <td mat-cell *matCellDef="let element">{{ element.attachmentPath }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Cc">
-      <th mat-header-cell *matHeaderCellDef>Cc</th>
+      <th mat-header-cell *matHeaderCellDef [style.width.px]="columnWidth('Cc')" [style.min-width.px]="columnWidth('Cc')">Cc<span class="resize_handle" (mousedown)="startResize($event, 'Cc')"></span></th>
       <td mat-cell *matCellDef="let element">{{ element.ccRecipients }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Header">
-      <th mat-header-cell *matHeaderCellDef>Header</th>
+      <th mat-header-cell *matHeaderCellDef [style.width.px]="columnWidth('Header')" [style.min-width.px]="columnWidth('Header')">Header<span class="resize_handle" (mousedown)="startResize($event, 'Header')"></span></th>
       <td mat-cell *matCellDef="let element">{{ element.header }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Footer">
-      <th mat-header-cell *matHeaderCellDef>Footer</th>
+      <th mat-header-cell *matHeaderCellDef [style.width.px]="columnWidth('Footer')" [style.min-width.px]="columnWidth('Footer')">Footer<span class="resize_handle" (mousedown)="startResize($event, 'Footer')"></span></th>
       <td mat-cell *matCellDef="let element">{{ element.footer }}</td>
     </ng-container>
 
     <ng-container matColumnDef="BodyAsHtml">
-      <th mat-header-cell *matHeaderCellDef>BodyAsHtml</th>
+      <th mat-header-cell *matHeaderCellDef [style.width.px]="columnWidth('BodyAsHtml')" [style.min-width.px]="columnWidth('BodyAsHtml')">BodyAsHtml<span class="resize_handle" (mousedown)="startResize($event, 'BodyAsHtml')"></span></th>
       <td mat-cell *matCellDef="let element">{{ element.bodyAsHtml }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <th mat-header-cell *matHeaderCellDef [style.width.px]="columnWidth('Status')" [style.min-width.px]="columnWidth('Status')">Status<span class="resize_handle" (mousedown)="startResize($event, 'Status')"></span></th>
       <td mat-cell *matCellDef="let element">{{ element.status }}</td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+  </div>
 </div>
