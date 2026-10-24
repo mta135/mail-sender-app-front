@@ -121,8 +121,8 @@ export class MailSender {
   }
 
 
-  columnWidth(column: string): number {
-    return this.columnWidths()[column] ?? 300;
+  columnWidth(column: string): number | null {
+    return this.columnWidths()[column] ?? null;
   }
 
   startResize(event: MouseEvent, column: string): void {

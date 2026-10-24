@@ -56,15 +56,15 @@
     --mat-table-row-item-outline-color: #e0e0e0;
     --mat-table-row-item-label-text-color: #6c757d;
     /* Material's own tokens for the row heights (52px / 56px by default) */
-    --mat-table-row-item-container-height: 16px;
-    --mat-table-header-container-height: 48px;
+    --mat-table-row-item-container-height: 30px;
+    --mat-table-header-container-height: 34px;
 }
 
 /* Column widths are set on the header cells (see columnWidth); long values wrap inside them */
 .mat-mdc-header-cell,
 .mat-mdc-cell {
     overflow-wrap: anywhere;
-    padding: 0;
+    padding: 0 14px;
 }
 
 /* Drag handle on the right edge of each header cell, used to resize the column */
