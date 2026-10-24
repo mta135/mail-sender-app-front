@@ -5,5 +5,5 @@ export interface MailImportResult {
     isSucces: boolean;
     message: string;
 
-    mailMessageModel: MailMessageModel[];
+    mailMessages: MailMessageModel[];
 }
