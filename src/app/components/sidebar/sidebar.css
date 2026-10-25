@@ -62,6 +62,9 @@
 /* Navigation Lists */
 .sidebar-nav {
     flex: 1;
+    /* Puts the first icon's centre 53px from the top, level with the uploader's cloud icon
+       (mail-sender: 20px wrapper padding + 1px border + 18px padding + half of the 28px icon) */
+    padding-top: 10px;
 }
 
 .nav-list {

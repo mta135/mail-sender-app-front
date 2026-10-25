@@ -18,10 +18,9 @@
 .wrapper {
     width: 100%;
     min-height: 100vh;
-    /* 26px top = sidebar padding (24px) + .nav-item padding (2px), so the uploader's
-       top edge lines up with the first sidebar icon */
+    /* 20px top = the toast's top offset, so the uploader's top edge lines up with the toast */
     /* 24px bottom = sidebar padding, so the table's bottom edge lines up with the avatar */
-    padding: 26px 15px 24px;
+    padding: 20px 15px 24px;
     background: #fff;
     /* Column layout lets the table be pushed to the bottom (see .mat-mdc-table) */
     display: flex;
@@ -41,10 +40,19 @@
     /* Fills the rest of the wrapper, so its bottom edge lines up with the sidebar avatar */
     flex: 1 1 0;
     min-height: 0;
-    overflow: auto;
+    /* Scrolling happens in .panel_scroll; clipping here keeps the scrollbars inside the
+       rounded corners instead of drawing square over them */
+    overflow: hidden;
+    display: flex;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
     background: #fff;
+}
+
+.panel_scroll {
+    flex: 1;
+    min-width: 0;
+    overflow: auto;
 }
 
 .mat-mdc-table {
@@ -153,11 +161,7 @@
     cursor: pointer;
 }
 
-.submit_btn {
-    background: #3B0075;
-    color: #fff;
-}
-
+.submit_btn,
 .cancel_btn {
     background: #fff;
     color: #3B0075;

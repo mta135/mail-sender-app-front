@@ -29,6 +29,7 @@
 
   </div>
   <div class="panel">
+  <div class="panel_scroll">
   <table mat-table [dataSource]="dataSource()" class="mat-shadow-2">
     <ng-container matColumnDef="From">
       <th mat-header-cell *matHeaderCellDef [style.width.px]="columnWidth('From')" [style.min-width.px]="columnWidth('From')">From<span class="resize_handle" (mousedown)="startResize($event, 'From')"></span></th>
@@ -83,5 +84,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+  </div>
   </div>
 </div>
