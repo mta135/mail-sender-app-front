@@ -29,6 +29,11 @@
 
   </div>
   <div class="panel">
+  @if (isLoading()) {
+  <div class="panel_loading">
+    <mat-spinner diameter="88" strokeWidth="2"></mat-spinner>
+  </div>
+  }
   <div class="panel_scroll">
   <table mat-table [dataSource]="dataSource()" class="mat-shadow-2">
     <ng-container matColumnDef="From">

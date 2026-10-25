@@ -2,12 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { MailSenderService } from '../../core/service/mail-sender.service';
 import { ToastService } from '../../core/service/toast-service';
 import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { finalize } from 'rxjs';
 import { MailImportResult } from '../../model/mail-import-result';
 import { MailMessageModel as MailMessages } from '../../model/mail-message';
 
 
 @Component({
-  imports: [MatTableModule],
+  imports: [MatTableModule, MatProgressSpinnerModule],
   selector: 'app-mail-sender',
   styleUrl: './mail-sender.css',
   templateUrl: './mail-sender.html',
@@ -30,6 +32,7 @@ export class MailSender {
 
   isUploading = signal(false);
   isDragging = signal(false);
+  isLoading = signal(false);
 
   private dragDepth = 0;
   error = signal<string | null>(null);
@@ -99,7 +102,9 @@ export class MailSender {
     const file = this.selectedFile();
     if (!file) return;
 
-    this.mailSenderService.UploadFile(file).subscribe({
+    this.isLoading.set(true);
+
+    this.mailSenderService.UploadFile(file).pipe(finalize(() => this.isLoading.set(false))).subscribe({
       next: (result: MailImportResult) => {
         console.log(result);
 

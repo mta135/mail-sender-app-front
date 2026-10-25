@@ -44,6 +44,8 @@
        rounded corners instead of drawing square over them */
     overflow: hidden;
     display: flex;
+    /* Anchors .panel_loading */
+    position: relative;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
     background: #fff;
@@ -53,6 +55,19 @@
     flex: 1;
     min-width: 0;
     overflow: auto;
+}
+
+/* Covers the grid while the file is being processed; above the sticky header */
+.panel_loading {
+    position: absolute;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.7);
+    /* Material's own token for the spinner colour */
+    --mat-progress-spinner-active-indicator-color: #3B0075;
 }
 
 .mat-mdc-table {
