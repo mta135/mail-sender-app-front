@@ -64,7 +64,7 @@
 .mat-mdc-header-cell,
 .mat-mdc-cell {
     overflow-wrap: anywhere;
-    padding: 0 14px;
+    padding: 0 12px;
     /* Empty columns (e.g. Cc) would otherwise shrink to the header text */
     min-width: 110px;
     font-family: sans-serif;
