@@ -3,7 +3,8 @@
     position: fixed;
     top: 20px;
     right: 20px;
-    min-width: 410px;
+    /* Fixed, so the uploader can leave room for it (see .choose_file in mail-sender.css) */
+    width: 410px;
     /* Same height as the file uploader: 28px icon + 2 x 18px padding + 2 x 1px border */
     height: 66px;
     display: flex;
@@ -11,22 +12,27 @@
     padding: 0 35px 0 25px;
     border-radius: 12px;
     background: #fff;
-    border: 1px solid #e0e0e0;
+    /* 1px grey border drawn inside the box, so the coloured stripe below can cover it */
+    box-shadow: inset 0 0 0 1px #e0e0e0;
     overflow: hidden;
     z-index: 1000;
     animation: slideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
 }
 
-/* Coloured stripe on the left. Drawn as its own bar instead of border-left, which
-   blends into the 1px grey border at the rounded corners and looks blurred */
+/* Coloured stripe on the left that follows both left corners and stops where their
+   rounding ends: the box is as wide as the radius, so its top/bottom border is only the arc */
 .toast::before {
     content: '';
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
-    width: 3px;
-    background: var(--toast-color);
+    width: 12px;
+    border: solid var(--toast-color);
+    border-width: 1px 0 1px 2px;
+    border-radius: 12px 0 0 12px;
+    /* Above the progress bar, which would otherwise cover the bottom arc */
+    z-index: 1;
 }
 
 .success {

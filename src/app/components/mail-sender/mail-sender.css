@@ -27,10 +27,11 @@
     flex-direction: column;
 }
 
-/* Uploader and the button row take three quarters of the content area */
+/* Uploader and the button row take three quarters of the content area, but never reach
+   under the toast: 431px = 410px toast + 20px its right offset + 16px gap - 15px padding */
 .choose_file,
 .actions {
-    width: 75%;
+    width: min(75%, calc(100% - 431px));
 }
 
 /* Panel holding the grid; the grid scrolls vertically and horizontally inside it */
