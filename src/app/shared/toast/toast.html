@@ -6,6 +6,26 @@
     role="status"
     aria-live="polite"
   >
-    {{ toast.text }}
+    <div class="toast-content">
+      <span class="check" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          @if (toast.type === 'success') {
+            <path d="M5 12.5l4.5 4.5L19 7.5" />
+          } @else {
+            <path d="M12 5v9M12 18.5v.5" />
+          }
+        </svg>
+      </span>
+      <div class="message">
+        <span class="text text-1">{{ toast.type === 'success' ? 'Succes' : 'Eroare' }}</span>
+        <span class="text text-2">{{ toast.text }}</span>
+      </div>
+    </div>
+    <svg class="close" viewBox="0 0 24 24" (click)="close()">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+    <div class="progress">
+      <div class="progress-bar" [style.animation-duration.ms]="toast.duration"></div>
+    </div>
   </div>
 }

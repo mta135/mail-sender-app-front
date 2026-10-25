@@ -7,5 +7,10 @@ import { ToastService } from '../../core/service/toast-service';
   templateUrl: './toast.html',
 })
 export class Toast {
-  protected readonly toast = inject(ToastService).toast;
+  private readonly toastService = inject(ToastService);
+  protected readonly toast = this.toastService.toast;
+
+  close() {
+    this.toastService.hide();
+  }
 }

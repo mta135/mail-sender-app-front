@@ -15,7 +15,12 @@ export class ToastService {
   show(message: string, type: 'success' | 'error' = 'success', duration = 3000) {
 
     clearTimeout(this.hideTimer);
-    this.toastState.set({ text: message, type });
+    this.toastState.set({ text: message, type, duration });
     this.hideTimer = setTimeout(() => this.toastState.set(null), duration);
+  }
+
+  hide() {
+    clearTimeout(this.hideTimer);
+    this.toastState.set(null);
   }
 }
