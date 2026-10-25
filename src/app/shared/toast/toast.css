@@ -36,8 +36,8 @@
 }
 
 .success {
-    /* Same colour as the buttons and the file uploader in mail-sender.css */
-    --toast-color: #3B0075;
+    /* Green of the Excel icon (excel-icon-v2.png) */
+    --toast-color: #107C41;
 }
 
 .error {
@@ -77,6 +77,11 @@
     stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
+}
+
+/* Darker green of the Excel icon for the check mark */
+.success .check svg {
+    stroke: #185C37;
 }
 
 .message {
