@@ -5,11 +5,12 @@
     right: 20px;
     /* Fixed, so the uploader can leave room for it (see .choose_file in mail-sender.css) */
     width: 410px;
-    /* Same height as the file uploader: 28px icon + 2 x 18px padding + 2 x 1px border */
-    height: 66px;
+    /* At least the file uploader's height (28px icon + 2 x 18px padding + 2 x 1px border);
+       grows downwards when a longer message wraps onto more lines */
+    min-height: 66px;
     display: flex;
     align-items: center;
-    padding: 0 35px 0 25px;
+    padding: 12px 35px 12px 25px;
     border-radius: 12px;
     background: #fff;
     /* 1px grey border drawn inside the box, so the coloured stripe below can cover it */
@@ -87,7 +88,10 @@
 .message {
     display: flex;
     flex-direction: column;
-    margin: 0 20px;
+    /* Lets long text wrap instead of overflowing the toast */
+    min-width: 0;
+    overflow-wrap: anywhere;
+    margin: 0 10px 0 20px;
 }
 
 .message .text {

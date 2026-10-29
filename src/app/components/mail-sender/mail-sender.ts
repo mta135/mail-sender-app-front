@@ -108,11 +108,20 @@ export class MailSender {
       next: (result: MailImportResult) => {
         console.log(result);
 
-        debugger;
         if (result.isSucces) {
 
           this.BindMessagesGrid(result.value);
-          this.toastService.show('Fisierul este valid');
+
+          if (result.value.some(x => x.hasError == true)) {
+
+            this.toastService.show("În fișier sunt erori. Pentru a transmite e-mailurile, corectați erorile.", 'error');
+            this.isUploading.set(false);
+
+            return;
+          }
+
+
+          this.toastService.show('Fisierul este valid.');
 
         } else {
           this.toastService.show(result.message, 'error');
@@ -127,7 +136,7 @@ export class MailSender {
 
   private BindMessagesGrid(value: MailMessages[]): void {
 
-    this.displayedColumns = ['From', 'To', 'Subject', 'Body', 'Attachments', 'Cc', 'Header', 'Footer', 'BodyAsHtml', 'Status',];
+    this.displayedColumns = ['From', 'To', 'Subject', 'Body', 'Attachments', 'Cc', 'Header', 'Footer', 'BodyAsHtml', 'Status', 'Error'];
     this.dataSource.set(value ?? []);
   }
 
