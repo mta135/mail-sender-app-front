@@ -33,6 +33,7 @@ export class MailSender {
   isUploading = signal(false);
   isDragging = signal(false);
   isLoading = signal(false);
+  hasErrors = signal(false);
 
   private dragDepth = 0;
   error = signal<string | null>(null);
@@ -91,6 +92,7 @@ export class MailSender {
   cancel(): void {
     this.selectedFile.set(null);
     this.error.set(null);
+    this.hasErrors.set(false);
   }
 
   UploadTempalteFile(): void {
@@ -103,6 +105,7 @@ export class MailSender {
     if (!file) return;
 
     this.isLoading.set(true);
+    this.hasErrors.set(false);
 
     this.mailSenderService.UploadFile(file).pipe(finalize(() => this.isLoading.set(false))).subscribe({
       next: (result: MailImportResult) => {
@@ -115,7 +118,7 @@ export class MailSender {
           if (result.value.some(x => x.hasError == true)) {
 
             this.toastService.show("În fișier sunt erori. Pentru a transmite e-mailurile, corectați erorile.", 'error');
-            this.isUploading.set(false);
+            this.hasErrors.set(true);
 
             return;
           }
@@ -136,7 +139,7 @@ export class MailSender {
 
   private BindMessagesGrid(value: MailMessages[]): void {
 
-    this.displayedColumns = ['From', 'To', 'Subject', 'Body', 'Attachments', 'Cc', 'Header', 'Footer', 'BodyAsHtml', 'Status', 'Error'];
+    this.displayedColumns = ['Number', 'From', 'To', 'Subject', 'Body', 'Attachments', 'Cc', 'Header', 'Footer', 'BodyAsHtml', 'Status', 'Error'];
     this.dataSource.set(value ?? []);
   }
 

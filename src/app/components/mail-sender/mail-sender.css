@@ -117,6 +117,15 @@
     line-height: 1.2;
 }
 
+/* Rows whose message has an error (hasError) */
+.row_error {
+    background: #f28b82;
+}
+
+.row_error .mat-mdc-cell {
+    color: #8b0000;
+}
+
 /* Vertical lines between columns */
 .mat-mdc-header-cell:not(:last-child),
 .mat-mdc-cell:not(:last-child) {
