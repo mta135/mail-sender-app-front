@@ -15,6 +15,7 @@ export class MailSenderService {
 
     private apiUrl = 'https://localhost:7191/api/File/MessageData';
     private templateUrl = 'https://localhost:7191/api/File/Template';
+
     private sendMessagesUrl = 'https://localhost:7191/api/MailDelivery/SendMailMessages';
     private hubUrl = 'https://localhost:7191/hubs/mail-status';
 

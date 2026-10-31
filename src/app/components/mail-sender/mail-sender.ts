@@ -40,7 +40,6 @@ export class MailSender {
   error = signal<string | null>(null);
 
   constructor() {
-    this.mailSenderService.mailStatus$.pipe(takeUntilDestroyed()).subscribe((result) => console.log(result));
   }
 
 
@@ -105,6 +104,8 @@ export class MailSender {
 
     this.mailSenderService.SendMailMessages(this.dataSource()).pipe(finalize(() => this.isUploading.set(false))).subscribe({
       next: (result) => {
+        debugger
+
         console.log(result);
       },
       error: (err) => {
