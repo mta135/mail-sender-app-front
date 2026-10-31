@@ -49,7 +49,9 @@ export class MailSender implements OnInit {
 
   ngOnInit(): void {
 
-    this.mailStatusHubService.mailStatus$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(result => this.updateRowStatus(result));
+    this.mailStatusHubService.mailStatus$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => this.updateRowStatus(result));
 
   }
 
@@ -128,6 +130,8 @@ export class MailSender implements OnInit {
       });
     } catch (err) {
       console.error('Nu m-am putut conecta la SignalR', err);
+
+
       this.isUploading.set(false);
     }
   }
