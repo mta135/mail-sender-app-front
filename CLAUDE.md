@@ -22,17 +22,19 @@ Angular 22 (standalone components, `@angular/build:application` builder), Angula
 `src/main.ts` bootstraps `App` (`src/app/app.ts`) with `appConfig` (`src/app/app.config.ts`). `App`'s template renders `<app-sidebar>`, a `<router-outlet>` inside `<main class="content">`, and `<app-toast>`.
 
 - **Routes** are in `src/app/route/app.route.ts`: `''` redirects to `mail-sender`, the only page (`MailSender`).
-- **Sidebar is `position: fixed`** and collapsed (80px) by default; it expands to 260px purely in CSS on `:hover` / keyboard focus, so there is no collapsed state in TypeScript. Main content placed beside it needs its own left offset, and reacting to collapse requires lifting that state out of `Sidebar`. Its "Sablon" link downloads the Excel template as `sablon.xlsx`.
-- **Folders:** feature components in `src/app/components/<name>/`, shared UI in `src/app/shared/` (`Toast`), services in `src/app/core/service/`, interfaces in `src/app/model/`.
+- **Sidebar is `position: fixed`** and collapsed (80px) by default; it expands to 260px purely in CSS on `:hover` / keyboard focus, so there is no collapsed state in TypeScript. `src/app/app.css` makes `.content` follow it with a matching `margin-left` (`app-sidebar:hover + .content`), so widths, triggers and transition timing must stay in sync with `sidebar.css`. Its "Sablon" link downloads the Excel template from `/api/File/Template` as `sablon.xlsx`.
+- **Folders:** feature components in `src/app/components/<name>/`, shared UI in `src/app/shared/` (the `Toast` component and the `FileUpload` and `ColumnResize` directives), services in `src/app/core/service/`, interfaces in `src/app/model/`.
 - **Toasts:** call `ToastService.show(message, 'success' | 'error')`; `App` renders the single `<app-toast>`.
+- **`FileUpload`** (`[appFileUpload]`) handles drag and drop on the upload label, rejects non-Excel files with a toast, and emits `fileDropped`.
+- **`ColumnResize`** (`th[appColumnResize]`) adds a drag handle to each grid header cell (minimum 80px). The handle is created at runtime, so it gets no view encapsulation and its `.resize_handle` style lives in `src/styles.css`.
 
 ## Mail flow
 
-The backend is a separate ASP.NET Core project, not in this repo, at `https://localhost:7191`. URLs are hard-coded in `MailSenderService`; `MailStatusHubService` reads the base URL from `src/environments/environment.development.ts`. Its CORS policy must allow the `http://localhost:4200` origin with credentials, or the SignalR connection fails.
+The backend is a separate ASP.NET Core project, not in this repo, at `https://localhost:7191`. URLs are hard-coded in `MailSenderService`; `MailStatusHubService` reads the base URL from `src/environments/environment.development.ts`, the only environment file (there are no `fileReplacements`, so production builds use it too). The backend's CORS policy must allow the `http://localhost:4200` origin with credentials, or the SignalR connection fails.
 
-1. **Import:** choosing an Excel file (`.xlsx`/`.xls`) POSTs it to `/api/File/MessageData`, which returns `MailImportResult` (`isSucces`, `message`, `value`). `value` fills the grid; rows with `hasError` are highlighted and block sending through the `hasErrors` signal. Dropping a file only selects it; it does not trigger the import.
+1. **Import:** choosing an Excel file (`.xlsx`/`.xls`) POSTs it to `/api/File/MessageData`, which returns `MailImportResult` (`isSucces`, `message`, `value`). `value` fills the grid; rows with `hasError` are highlighted and disable both "Transmite" and "Anulează" through the `hasErrors` signal. Dropping a file only selects it (`FileUpload` emits, `MailSender` sets `selectedFile`); it does not trigger the import.
 2. **Send:** "Transmite" calls `MailSender.SendMailMessages()`, which starts the SignalR connection to `/hubs/mail-status` through `MailStatusHubService.connect()` if needed, then POSTs the grid rows to `/api/MailDelivery/SendMailMessages?connectionId=<id>`. The `connectionId` comes from the live hub connection, never from a fixed value.
-3. **Status:** the API emits a `MailStatus` event per message, exposed as `MailStatusHubService.mailStatus$`. The payload (`MailDeliveryResult`) is `{ request, success, error }` and has no field identifying the grid row, so updating the Status column needs the API to add one.
+3. **Status:** the API emits a `MailStatus` event per message, exposed as `MailStatusHubService.mailStatus$`. `MailSender` subscribes and `updateRowStatus()` matches each result to a grid row by `id`, then sets `status` and `errorMessage`. The frontend expects `MailDeliveryResult` as `{ id, status, error? }`, so the API must send that shape.
 
 The POST response is plain text, not JSON, so the request must keep `responseType: 'text'`. It completes only after every message has been sent, and a 200 does not mean every message succeeded: per-message results are in `MailStatus`.
 
@@ -51,4 +53,4 @@ Two global stylesheets load in this order (`angular.json`): `src/material-theme.
 - `material-theme.scss` applies `mat.theme()` (Material 3, azure primary / blue tertiary, Roboto, light scheme) and exposes `--mat-sys-*` CSS variables. Roboto and Material Symbols Outlined are loaded from Google Fonts in `src/index.html`.
 - `styles.css` has a universal margin/padding/`box-sizing` reset and forces `body` to `#fff`, overriding the Material `--mat-sys-surface` background set in `material-theme.scss`.
 - The sidebar uses hard-coded hex colors rather than Material tokens. Angular Material is used only in `MailSender` (`MatTable`, `MatProgressSpinner`).
-- Production build budgets: component styles warn at 4kB and error at 8kB; initial bundle warns at 500kB and errors at 1MB.
+- Production build budgets: component styles warn at 4kB and error at 8kB; initial bundle warns at 500kB and errors at 1MB. `mail-sender.css` and `toast.css` are already over the 4kB warning (about 4.8kB each).
