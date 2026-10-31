@@ -1,8 +1,7 @@
 <div class="wrapper">
   <div class="choose_file">
 
-    <label for="choose_file" [class.dragging]="isDragging()" (dragenter)="onDragEnter($event)"
-      (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+    <label for="choose_file" appFileUpload (fileDropped)="selectedFile.set($event)">
       <input type="file" id="choose_file"
         accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
         (change)="onFileSelected($event)" />

@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MailSenderService } from '../../core/service/mail-sender.service';
 import { MailStatusHubService } from '../../core/service/mail-status-hub.service';
 import { ToastService } from '../../core/service/toast-service';
+import { FileUpload } from '../../shared/file-upload/file-upload';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { finalize } from 'rxjs';
@@ -12,15 +13,10 @@ import { MailDeliveryResult } from '../../model/mail-delivery-result';
 
 
 @Component({
-  imports: [MatTableModule, MatProgressSpinnerModule],
+  imports: [MatTableModule, MatProgressSpinnerModule, FileUpload],
   selector: 'app-mail-sender',
   styleUrl: './mail-sender.css',
   templateUrl: './mail-sender.html',
-
-  host: {
-    '(window:dragover)': '$event.preventDefault()',
-    '(window:drop)': '$event.preventDefault()',
-  },
 })
 export class MailSender implements OnInit {
 
@@ -36,11 +32,9 @@ export class MailSender implements OnInit {
   selectedFile = signal<File | null>(null);
 
   isUploading = signal(false);
-  isDragging = signal(false);
   isLoading = signal(false);
   hasErrors = signal(false);
 
-  private dragDepth = 0;
   error = signal<string | null>(null);
 
   constructor() {
@@ -67,43 +61,6 @@ export class MailSender implements OnInit {
     this.GetMessage();
   }
 
-
-  onDragEnter(event: DragEvent): void {
-    event.preventDefault();
-    this.dragDepth++;
-    this.isDragging.set(true);
-  }
-
-  onDragOver(event: DragEvent): void {
-    event.preventDefault();
-    if (event.dataTransfer) {
-      event.dataTransfer.dropEffect = 'copy';
-    }
-  }
-
-
-  onDragLeave(event: DragEvent): void {
-    event.preventDefault();
-    this.dragDepth = Math.max(0, this.dragDepth - 1);
-    if (this.dragDepth === 0) {
-      this.isDragging.set(false);
-    }
-  }
-
-  onDrop(event: DragEvent): void {
-    event.preventDefault();
-    this.dragDepth = 0;
-    this.isDragging.set(false);
-    const file = event.dataTransfer?.files[0];
-    if (!file) return;
-
-    if (!/\.(xlsx|xls)$/i.test(file.name)) {
-      this.toastService.show('Sunt acceptate doar fișiere Excel (.xlsx, .xls).', 'error');
-      return;
-    }
-
-    this.selectedFile.set(file);
-  }
 
   cancel(): void {
     this.selectedFile.set(null);
