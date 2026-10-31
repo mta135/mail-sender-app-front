@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MailSenderService } from '../../core/service/mail-sender.service';
 import { ToastService } from '../../core/service/toast-service';
 import { MatTableModule } from '@angular/material/table';
@@ -37,6 +38,10 @@ export class MailSender {
 
   private dragDepth = 0;
   error = signal<string | null>(null);
+
+  constructor() {
+    this.mailSenderService.mailStatus$.pipe(takeUntilDestroyed()).subscribe((result) => console.log(result));
+  }
 
 
   onFileSelected(event: Event): void {
@@ -95,8 +100,17 @@ export class MailSender {
     this.hasErrors.set(false);
   }
 
-  UploadTempalteFile(): void {
+  SendMailMessages(): void {
+    this.isUploading.set(true);
 
+    this.mailSenderService.SendMailMessages(this.dataSource()).pipe(finalize(() => this.isUploading.set(false))).subscribe({
+      next: (result) => {
+        console.log(result);
+      },
+      error: (err) => {
+        this.toastService.show(typeof err.error === 'string' ? err.error : 'Eroare la transmiterea mesajelor.', 'error');
+      }
+    });
   }
 
 
