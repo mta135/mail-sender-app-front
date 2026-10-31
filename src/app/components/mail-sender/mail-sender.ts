@@ -1,10 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MailSenderService } from '../../core/service/mail-sender.service';
+import { MailStatusHubService } from '../../core/service/mail-status-hub.service';
 import { ToastService } from '../../core/service/toast-service';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { finalize } from 'rxjs';
+import { finalize, from, switchMap } from 'rxjs';
 import { MailImportResult } from '../../model/mail-import-result';
 import { MailMessageModel as MailMessages } from '../../model/mail-message';
 
@@ -28,6 +29,7 @@ export class MailSender {
 
   private toastService = inject(ToastService);
   private mailSenderService = inject(MailSenderService);
+  private mailStatusHubService = inject(MailStatusHubService);
 
   selectedFile = signal<File | null>(null);
 
@@ -102,7 +104,10 @@ export class MailSender {
   SendMailMessages(): void {
     this.isUploading.set(true);
 
-    this.mailSenderService.SendMailMessages(this.dataSource()).pipe(finalize(() => this.isUploading.set(false))).subscribe({
+    from(this.mailStatusHubService.connect()).pipe(
+      switchMap((connectionId) => this.mailSenderService.SendMailMessages(this.dataSource(), connectionId)),
+      finalize(() => this.isUploading.set(false))
+    ).subscribe({
       next: (result) => {
         debugger
 
