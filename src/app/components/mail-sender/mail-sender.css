@@ -96,16 +96,6 @@
     text-align: left;
 }
 
-/* Drag handle on the right edge of each header cell, used to resize the column */
-.resize_handle {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 6px;
-    height: 100%;
-    cursor: col-resize;
-}
-
 .mat-mdc-header-cell {
     background: #f2f2f2;
     color: #000;

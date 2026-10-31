@@ -4,6 +4,7 @@ import { MailSenderService } from '../../core/service/mail-sender.service';
 import { MailStatusHubService } from '../../core/service/mail-status-hub.service';
 import { ToastService } from '../../core/service/toast-service';
 import { FileUpload } from '../../shared/file-upload/file-upload';
+import { ColumnResize } from '../../shared/column-resize/column-resize';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { finalize } from 'rxjs';
@@ -13,7 +14,7 @@ import { MailDeliveryResult } from '../../model/mail-delivery-result';
 
 
 @Component({
-  imports: [MatTableModule, MatProgressSpinnerModule, FileUpload],
+  imports: [MatTableModule, MatProgressSpinnerModule, FileUpload, ColumnResize],
   selector: 'app-mail-sender',
   styleUrl: './mail-sender.css',
   templateUrl: './mail-sender.html',
@@ -22,7 +23,6 @@ export class MailSender implements OnInit {
 
   displayedColumns: string[] = [];
   dataSource = signal<MailMessages[]>([]);
-  columnWidths = signal<Record<string, number>>({});
 
   private toastService = inject(ToastService);
   private mailSenderService = inject(MailSenderService);
@@ -136,30 +136,6 @@ export class MailSender implements OnInit {
     this.dataSource.set(value ?? []);
   }
 
-
-  columnWidth(column: string): number | null {
-    return this.columnWidths()[column] ?? null;
-  }
-
-  startResize(event: MouseEvent, column: string): void {
-    // Keeps the drag from selecting the header text
-    event.preventDefault();
-
-    const startX = event.clientX;
-    const startWidth = (event.target as HTMLElement).parentElement!.offsetWidth;
-
-    const onMove = (move: MouseEvent) => {
-      const width = Math.max(80, startWidth + move.clientX - startX);
-      this.columnWidths.update((widths) => ({ ...widths, [column]: width }));
-    };
-    const onUp = () => {
-      document.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseup', onUp);
-    };
-
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
-  }
 
   private ClearGrid(): void {
     if (this.dataSource().length > 0) {
