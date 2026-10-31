@@ -1,13 +1,14 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MailSenderService } from '../../core/service/mail-sender.service';
 import { MailStatusHubService } from '../../core/service/mail-status-hub.service';
 import { ToastService } from '../../core/service/toast-service';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { finalize, from, switchMap } from 'rxjs';
+import { finalize } from 'rxjs';
 import { MailImportResult } from '../../model/mail-import-result';
 import { MailMessageModel as MailMessages } from '../../model/mail-message';
+import { MailDeliveryResult } from '../../model/mail-delivery-result';
 
 
 @Component({
@@ -21,7 +22,7 @@ import { MailMessageModel as MailMessages } from '../../model/mail-message';
     '(window:drop)': '$event.preventDefault()',
   },
 })
-export class MailSender {
+export class MailSender implements OnInit {
 
   displayedColumns: string[] = [];
   dataSource = signal<MailMessages[]>([]);
@@ -30,6 +31,7 @@ export class MailSender {
   private toastService = inject(ToastService);
   private mailSenderService = inject(MailSenderService);
   private mailStatusHubService = inject(MailStatusHubService);
+  private destroyRef = inject(DestroyRef);
 
   selectedFile = signal<File | null>(null);
 
@@ -44,6 +46,12 @@ export class MailSender {
   constructor() {
   }
 
+
+  ngOnInit(): void {
+
+    this.mailStatusHubService.mailStatus$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(result => this.updateRowStatus(result));
+
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -101,22 +109,27 @@ export class MailSender {
     this.hasErrors.set(false);
   }
 
-  SendMailMessages(): void {
+  async SendMailMessages(): Promise<void> {
     this.isUploading.set(true);
 
-    from(this.mailStatusHubService.connect()).pipe(
-      switchMap((connectionId) => this.mailSenderService.SendMailMessages(this.dataSource(), connectionId)),
-      finalize(() => this.isUploading.set(false))
-    ).subscribe({
-      next: (result) => {
-        debugger
+    try {
+      debugger
+      const connectionId = await this.mailStatusHubService.connect();
 
-        console.log(result);
-      },
-      error: (err) => {
-        this.toastService.show(typeof err.error === 'string' ? err.error : 'Eroare la transmiterea mesajelor.', 'error');
-      }
-    });
+      this.mailSenderService.SendMailMessages(this.dataSource(), connectionId).subscribe({
+        next: text => console.log(text),
+        error: err => {
+          console.error(err);
+
+          this.toastService.show(`Eroare la trimitere${err?.error ?? ''}`, 'error');
+          this.isUploading.set(false);
+        },
+        complete: () => this.isUploading.set(false),
+      });
+    } catch (err) {
+      console.error('Nu m-am putut conecta la SignalR', err);
+      this.isUploading.set(false);
+    }
   }
 
 
@@ -142,7 +155,6 @@ export class MailSender {
 
             return;
           }
-
 
           this.toastService.show('Fisierul este valid.');
 
@@ -192,6 +204,13 @@ export class MailSender {
     if (this.dataSource().length > 0) {
       this.dataSource.set([]);
     }
+  }
+
+
+  private updateRowStatus(result: MailDeliveryResult): void {
+    this.dataSource.update(rows =>
+      rows.map(r => (r.id === result.id ? { ...r, status: result.status, errorMessage: result.error ?? null } : r))
+    );
   }
 
 }

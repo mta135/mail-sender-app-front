@@ -2,6 +2,7 @@ import { MailSettingModel } from './mail-setting';
 
 export interface MailMessageModel {
 
+    id: string;
     mailFrom: string;
     toRecipients: string;
 
