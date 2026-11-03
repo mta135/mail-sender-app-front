@@ -43,7 +43,7 @@
 }
 
 .error {
-    --toast-color: #f44336;
+    --toast-color: #b3123e;
 }
 
 /* Applied by animate.leave; Angular removes the element once the transition ends */
